@@ -4,6 +4,29 @@
         <key>inter_config</key>
         <value>0</value>
     </entry>
-
+    <entry>
+        <key>ads_splash</key>
+        <value>2</value>
+    </entry>
+    <entry>
+        <key>banner_enabled</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>max_retry</key>
+        <value>3</value>
+    </entry>
+    <entry>
+        <key>max_retry1</key>
+        <value>3</value>
+    </entry>
+    <entry>
+        <key>max_retry2</key>
+        <value>3</value>
+    </entry>
+    <entry>
+        <key>max_retry345</key>
+        <value>3</value>
+    </entry>
 
 </defaultsMap>

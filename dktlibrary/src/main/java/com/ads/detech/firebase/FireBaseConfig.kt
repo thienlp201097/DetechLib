@@ -1,18 +1,23 @@
 package com.ads.detech.firebase
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.ads.detech.R
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import org.xmlpull.v1.XmlPullParser
 
 
 object FireBaseConfig {
 
-    fun initRemoteConfig(remote_config_defaults : Int,completeListener: CompleteListener) {
+    private val configMap: MutableMap<String, String> = mutableMapOf()
+
+    fun initRemoteConfig(context: Context,remote_config_defaults : Int,completeListener: CompleteListener) {
         val mFirebaseRemoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
         val configSettings: FirebaseRemoteConfigSettings = FirebaseRemoteConfigSettings.Builder()
             .setMinimumFetchIntervalInSeconds(3600)
@@ -49,4 +54,5 @@ object FireBaseConfig {
         Log.d("==FireBaseConfig==", "getValue: $key ${mFirebaseRemoteConfig.getString(key)}")
         return mFirebaseRemoteConfig.getString(key)
     }
+
 }

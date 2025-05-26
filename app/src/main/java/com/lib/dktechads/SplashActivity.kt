@@ -30,7 +30,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        FireBaseConfig.initRemoteConfig(R.xml.remote_config_defaults,object : FireBaseConfig.CompleteListener{
+        FireBaseConfig.initRemoteConfig(this,R.xml.remote_config_defaults,object : FireBaseConfig.CompleteListener{
             override fun onComplete() {
                 FireBaseConfig.getValue("test")
                 if (isInitAds.get()) {
