@@ -6,6 +6,7 @@ plugins {
     id("com.google.gms.google-services")
     alias(libs.plugins.google.firebase.crashlytics)
 }
+val packageName = "com.lib.dktechads"
 
 android {
     namespace = "com.lib.dktechads"
@@ -55,7 +56,7 @@ tasks.register("generateRemoteConfig") {
         val entries = doc.getElementsByTagName("entry")
 
         val builder = StringBuilder()
-        builder.appendLine("package com.ads.detech.config")
+        builder.appendLine("package $packageName")
         builder.appendLine()
         builder.appendLine("object RemoteConfig {")
 
@@ -68,9 +69,8 @@ tasks.register("generateRemoteConfig") {
         for (i in 0 until entries.length) {
             val entry = entries.item(i)
             val key = entry.childNodes.item(1).textContent.trim()
-            val value = entry.childNodes.item(3).textContent.trim()
             val constKey = toScreamingSnakeCase(key)
-            builder.appendLine("    const val $constKey = \"$value\"")
+            builder.appendLine("    const val $constKey = \"$key\"")
         }
 
         builder.appendLine("}")
@@ -85,6 +85,9 @@ tasks.register("generateRemoteConfig") {
 tasks.named("preBuild") {
     dependsOn("generateRemoteConfig")
 }
+
+android.sourceSets.getByName("main").kotlin.srcDir("build/generated/source/remoteConfig/")
+
 
 dependencies {
 

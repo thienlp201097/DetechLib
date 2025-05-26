@@ -46,7 +46,7 @@ class SplashActivity : AppCompatActivity() {
                             .disableAppResumeWithActivity(SplashActivity::class.java)
                         AppOpenManager.getInstance().setTestAds(false)
                         com.ads.detech.ads.AdsManager.preloadNative(this@SplashActivity,"native_preload")
-                        com.ads.detech.ads.AdsManager.showAdsSplash(this@SplashActivity,"ad_config",R.layout.ad_native_fullscreen){
+                        com.ads.detech.ads.AdsManager.showAdsSplash(this@SplashActivity,RemoteConfig.ADS_SPLASH,binding.frBanner,R.layout.ad_native_fullscreen){
                             Utils.getInstance().replaceActivity(this@SplashActivity, MainActivity::class.java)
                         }
                     }

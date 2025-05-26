@@ -4,4 +4,5 @@ data class Units(
     val inter: String,
     val aoa: String,
     val native: String,
+    val banner: String,
 )
