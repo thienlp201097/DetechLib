@@ -20,13 +20,6 @@
         <key>max_retry1</key>
         <value>3</value>
     </entry>
-    <entry>
-        <key>max_retry2</key>
-        <value>3</value>
-    </entry>
-    <entry>
-        <key>max_retry345</key>
-        <value>3</value>
-    </entry>
+
 
 </defaultsMap>

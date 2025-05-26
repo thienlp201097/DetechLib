@@ -1,3 +1,5 @@
+import javax.xml.parsers.DocumentBuilderFactory
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -41,7 +43,48 @@ android {
     }
 }
 
+tasks.register("generateRemoteConfig") {
+    group = "codegen"
 
+    val xmlFile = file("src/main/res/xml/remote_config_defaults.xml")
+    val outputDir = file("build/generated/source/remoteConfig/")
+    val outputFile = File(outputDir, "RemoteConfig.kt")
+
+    doLast {
+        val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile)
+        val entries = doc.getElementsByTagName("entry")
+
+        val builder = StringBuilder()
+        builder.appendLine("package com.ads.detech.config")
+        builder.appendLine()
+        builder.appendLine("object RemoteConfig {")
+
+        fun toScreamingSnakeCase(input: String): String {
+            return input.replace(Regex("([a-z])([A-Z])"), "$1_$2")
+                .replace(Regex("[^A-Za-z0-9]"), "_")
+                .uppercase()
+        }
+
+        for (i in 0 until entries.length) {
+            val entry = entries.item(i)
+            val key = entry.childNodes.item(1).textContent.trim()
+            val value = entry.childNodes.item(3).textContent.trim()
+            val constKey = toScreamingSnakeCase(key)
+            builder.appendLine("    const val $constKey = \"$value\"")
+        }
+
+        builder.appendLine("}")
+        val newContent = builder.toString()
+        if (!outputFile.exists() || outputFile.readText() != newContent) {
+            outputFile.parentFile.mkdirs()
+            outputFile.writeText(newContent)
+        }
+    }
+}
+
+tasks.named("preBuild") {
+    dependsOn("generateRemoteConfig")
+}
 
 dependencies {
 

@@ -48,48 +48,7 @@ publishing {
     }
 }
 
-tasks.register("generateRemoteConfig") {
-    group = "codegen"
-    description = "Sinh file RemoteConfig.kt từ remote_config_defaults.xml"
 
-    doLast {
-        val xmlFile = file("${rootDir}/app/src/main/res/xml/remote_config_defaults.xml")
-        val outputFile = file("src/main/java/com/ads/detech/config/RemoteConfig.kt")
-
-        val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile)
-        val entries = doc.getElementsByTagName("entry")
-
-        val builder = StringBuilder()
-        builder.appendLine("package com.ads.detech.config")
-        builder.appendLine()
-        builder.appendLine("object RemoteConfig {")
-
-        fun toScreamingSnakeCase(input: String): String {
-            return input.replace(Regex("([a-z])([A-Z])"), "$1_$2")
-                .replace(Regex("[^A-Za-z0-9]"), "_")
-                .uppercase()
-        }
-
-        for (i in 0 until entries.length) {
-            val entry = entries.item(i)
-            val key = entry.childNodes.item(1).textContent.trim()
-            val value = entry.childNodes.item(3).textContent.trim()
-            val constKey = toScreamingSnakeCase(key)
-            builder.appendLine("    const val $constKey = \"$value\"")
-        }
-
-        builder.appendLine("}")
-        outputFile.parentFile.mkdirs()
-        outputFile.writeText(builder.toString())
-
-        println("✅ RemoteConfig.kt đã được tạo tại: ${outputFile.absolutePath}")
-    }
-}
-
-// Tự động chạy trước build
-tasks.named("preBuild") {
-    dependsOn("generateRemoteConfig")
-}
 
 dependencies {
     implementation(libs.androidx.core.ktx)
@@ -130,46 +89,4 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-config")
-}
-
-abstract class GenerateRemoteConfigTask : DefaultTask() {
-
-    init {
-        group = "codegen"
-        description = "Tự động sinh file RemoteConfig.kt từ remote_config_defaults.xml"
-    }
-
-    @TaskAction
-    fun generate() {
-        val xmlFile = file("src/main/res/xml/remote_config_defaults.xml")
-        val outputFile = file("src/main/java/com/example/config/RemoteConfig.kt")
-
-        val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile)
-        val entries = doc.getElementsByTagName("entry")
-
-        val builder = StringBuilder()
-        builder.appendLine("package com.example.config")
-        builder.appendLine()
-        builder.appendLine("object RemoteConfig {")
-
-        fun toScreamingSnakeCase(input: String): String {
-            return input.replace(Regex("([a-z])([A-Z])"), "$1_$2")
-                .replace(Regex("[^A-Za-z0-9]"), "_")
-                .uppercase()
-        }
-
-        for (i in 0 until entries.length) {
-            val entry = entries.item(i)
-            val key = entry.childNodes.item(1).textContent.trim()
-            val value = entry.childNodes.item(3).textContent.trim()
-            val constKey = toScreamingSnakeCase(key)
-            builder.appendLine("    const val $constKey = \"$value\"")
-        }
-
-        builder.appendLine("}")
-        outputFile.parentFile.mkdirs()
-        outputFile.writeText(builder.toString())
-
-        println("✅ Đã tạo file RemoteConfig.kt tại: ${outputFile.absolutePath}")
-    }
 }
