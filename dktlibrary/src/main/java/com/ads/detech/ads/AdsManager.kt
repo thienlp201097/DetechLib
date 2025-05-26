@@ -57,7 +57,6 @@ object AdsManager {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun showAdsInterstitial(activity: AppCompatActivity, key: String, layout_native : Int, onAction: () -> Unit) {
         if (isTestDevice || !AdmobUtils.isNetworkConnected(activity) || !isShowAds) {
             Log.d(TAG, "showAdsInterstitial: Bỏ qua quảng cáo (Test Device hoặc Không có mạng hoặc tắt quảng cáo)")

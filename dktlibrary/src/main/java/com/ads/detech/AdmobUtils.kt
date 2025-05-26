@@ -2151,6 +2151,68 @@ object AdmobUtils {
     }
 
     @JvmStatic
+    fun loadAndGetNativeFullScreenAdsWithInter(
+        context: Context,
+        nativeHolder: NativeHolderAdmob, mediaAspectRatio: Int,
+        adCallback: NativeAdCallbackNew
+    ) {
+        if (isTestDevice){
+            adCallback.onAdFail("is test device")
+            return
+        }
+        if (!isShowAds || !isNetworkConnected(context)) {
+            adCallback.onAdFail("No internet")
+            return
+        }
+        //If native is loaded return
+        if (nativeHolder.nativeAd != null) {
+            Log.d("===AdsLoadsNative", "Native not null")
+            return
+        }
+        val adRequest = AdRequest.Builder().build()
+        if (isTesting) {
+            nativeHolder.ads = context.getString(R.string.test_ads_admob_native_full_screen_id)
+        }
+        nativeHolder.isLoad = true
+        val videoOptions =
+            VideoOptions.Builder().setStartMuted(true).setCustomControlsRequested(true).build()
+        val adOptions = NativeAdOptions.Builder()
+            .setMediaAspectRatio(mediaAspectRatio)
+            .setVideoOptions(videoOptions)
+            .build()
+        val adLoader = AdLoader.Builder(context, nativeHolder.ads)
+        adLoader.withNativeAdOptions(adOptions)
+        adLoader.forNativeAd { nativeAd ->
+            nativeHolder.nativeAd = nativeAd
+            nativeHolder.isLoad = false
+            nativeHolder.native_mutable.value = nativeAd
+            checkAdsTest(nativeAd)
+            nativeAd.setOnPaidEventListener { adValue: AdValue? ->
+                adValue?.let {
+                    AdjustUtils.postRevenueAdjustNative(nativeAd, it, adUnit = nativeHolder.ads)
+                }
+            }
+            adCallback.onLoadedAndGetNativeAd(nativeAd)
+        }
+        adLoader.withAdListener(object : AdListener() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                Log.e("Admodfail", "onAdFailedToLoad" + adError.message)
+                Log.e("Admodfail", "errorCodeAds" + adError.cause)
+                nativeHolder.nativeAd = null
+                nativeHolder.isLoad = false
+                nativeHolder.native_mutable.value = null
+                adCallback.onAdFail("errorId2_" + adError.message)
+            }
+
+            override fun onAdClicked() {
+                super.onAdClicked()
+                adCallback.onClickAds()
+            }
+        })
+        adLoader.build().loadAd(adRequest)
+    }
+
+    @JvmStatic
     fun showNativeFullScreenAdsWithLayout(
         activity: Activity,
         nativeHolder: NativeHolderAdmob,

@@ -137,7 +137,7 @@ object AdsHolder {
         }
 
         NATIVE_FULL = NativeHolderAdmob(nativeAdUnit)
-        AdmobUtils.loadAndGetNativeFullScreenAds(
+        AdmobUtils.loadAndGetNativeFullScreenAdsWithInter(
             activity, NATIVE_FULL, MediaAspectRatio.ANY,
             object : AdmobUtils.NativeAdCallbackNew {
                 override fun onAdFail(error: String) = Unit
