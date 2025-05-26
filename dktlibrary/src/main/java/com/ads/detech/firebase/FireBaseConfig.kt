@@ -17,7 +17,7 @@ object FireBaseConfig {
 
     private val configMap: MutableMap<String, String> = mutableMapOf()
 
-    fun initRemoteConfig(context: Context,remote_config_defaults : Int,completeListener: CompleteListener) {
+    fun initRemoteConfig(remote_config_defaults : Int,completeListener: CompleteListener) {
         val mFirebaseRemoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
         val configSettings: FirebaseRemoteConfigSettings = FirebaseRemoteConfigSettings.Builder()
             .setMinimumFetchIntervalInSeconds(3600)

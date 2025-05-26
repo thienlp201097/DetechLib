@@ -10,6 +10,7 @@
     <application>
         <activity
             android:name=".activity.NativeFullActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <meta-data
