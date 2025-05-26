@@ -2,6 +2,5 @@ package com.ads.detech.firebase.native_preload
 
 data class AdsNativeConfig(
     val type: String,
-    val size: String,
     val units: NativeUnits
 )

@@ -107,8 +107,12 @@ object AdsManager {
                 AdsHolder.NATIVE = NativeHolderAdmob(adsConfig.units.native)
                 AdsHolder.loadAndShowNative(activity,viewGroup,layout_native,adsConfig.native_type,AdsHolder.NATIVE)
             }
-            else -> {
+            "1" -> {
                 AdsHolder.showAdBanner(activity,adsConfig.units.banner,viewGroup)
+            }
+
+            else -> {
+                viewGroup.gone()
             }
         }
     }
@@ -122,7 +126,12 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         val adsConfig = Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
-        AdsHolder.loadNative(activity,nativeHolder)
+        when (adsConfig.type) {
+            "1" -> {
+                AdsHolder.loadNative(activity,nativeHolder)
+            }
+        }
+
     }
 
     fun preloadNativeFullScreen(activity: Activity, key: String,onFail: () -> Unit){
@@ -134,8 +143,12 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         val adsConfig = Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
-        AdsHolder.loadNativeFullscreen(activity,nativeHolder){
-            onFail()
+        when (adsConfig.type) {
+            "1" -> {
+                AdsHolder.loadNativeFullscreen(activity,nativeHolder){
+                    onFail()
+                }
+            }
         }
     }
 
@@ -148,7 +161,15 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         val adsConfig = Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
-        AdsHolder.showNativeFullscreen(activity,viewGroup,layout_native,nativeHolder)
+        when (adsConfig.type) {
+            "1" -> {
+                AdsHolder.showNativeFullscreen(activity,viewGroup,layout_native,nativeHolder)
+            }
+
+            else ->{
+                viewGroup.gone()
+            }
+        }
     }
 
     fun showNativePreload(activity: Activity, key: String,viewGroup: ViewGroup,layout_native: Int){
@@ -160,8 +181,15 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         val adsConfig = Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
+        when (adsConfig.type) {
+            "1" -> {
+                AdsHolder.showNative(activity,viewGroup,layout_native,nativeHolder)
+            }
 
-        AdsHolder.showNative(activity,viewGroup,layout_native,nativeHolder)
+            else ->{
+                viewGroup.gone()
+            }
+        }
     }
 
     fun showNativeSmallPreload(activity: Activity, key: String,viewGroup: ViewGroup,layout_native: Int){
@@ -173,8 +201,16 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         val adsConfig = Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
+        when (adsConfig.type) {
+            "1" -> {
+                AdsHolder.showNativeSmall(activity,viewGroup,layout_native,nativeHolder)
+            }
 
-        AdsHolder.showNativeSmall(activity,viewGroup,layout_native,nativeHolder)
+            else ->{
+                viewGroup.gone()
+            }
+        }
+
     }
 
     fun showNativeBannerPreload(activity: Activity, key: String,viewGroup: ViewGroup,layout_native: Int){
@@ -186,7 +222,14 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         val adsConfig = Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
+        when (adsConfig.type) {
+            "1" -> {
+                AdsHolder.showNativeSmallBanner(activity,viewGroup,layout_native,nativeHolder)
+            }
 
-        AdsHolder.showNativeSmallBanner(activity,viewGroup,layout_native,nativeHolder)
+            else ->{
+                viewGroup.gone()
+            }
+        }
     }
 }
