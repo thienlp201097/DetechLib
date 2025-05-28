@@ -9,6 +9,8 @@
     <color name="white">#FFFFFF</color>
     <color name="gnt_white">#FFFFFF</color>
     <color name="gnt_blue">#4285f4</color>
+    <color name="black">#FF000000</color>
+    <color name="green">#92FF3F</color>
 
     <color name="float_transparent" tools:ignore="MissingDefaultResource">#00000000</color>
     <!--<color name="custom_float_bg">#96333333</color>-->

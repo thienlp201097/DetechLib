@@ -10,12 +10,15 @@ import com.ads.detech.AdmobUtils
 import com.ads.detech.AppOpenManager
 import com.ads.detech.ApplovinUtil
 import com.ads.detech.R
+import com.ads.detech.ads.AdsHolder.TAG
 import com.ads.detech.callback_applovin.NativeCallBackNew
 import com.ads.detech.firebase.FireBaseConfig
 import com.ads.detech.utils.Utils
 import com.ads.detech.utils.admod.callback.MobileAdsListener
 import com.applovin.mediation.MaxAd
 import com.applovin.mediation.nativeAds.MaxNativeAdView
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.lib.dktechads.databinding.ActivitySplashBinding
 import com.lib.dktechads.utils.AdsManager
 import com.lib.dktechads.utils.AdsManagerAdmod
@@ -30,6 +33,23 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        com.ads.detech.ads.AdsManager.initNativeLayouts(listOf(
+            R.layout.ad_template_medium,
+            R.layout.ad_template_small,
+            R.layout.ad_template_smallest,
+            R.layout.ad_template_mediumcollapsible
+        ))
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            Log.d(TAG, "onCreate: $token")
+        })
         FireBaseConfig.initRemoteConfig(R.xml.remote_config_defaults,object : FireBaseConfig.CompleteListener{
             override fun onComplete() {
                 FireBaseConfig.getValue("test")
@@ -46,7 +66,7 @@ class SplashActivity : AppCompatActivity() {
                             .disableAppResumeWithActivity(SplashActivity::class.java)
                         AppOpenManager.getInstance().setTestAds(false)
                         com.ads.detech.ads.AdsManager.preloadNative(this@SplashActivity,"native_preload")
-                        com.ads.detech.ads.AdsManager.showAdsSplash(this@SplashActivity,RemoteConfig.ADS_SPLASH,binding.frBanner,R.layout.ad_native_fullscreen){
+                        com.ads.detech.ads.AdsManager.showAdsSplash(this@SplashActivity,RemoteConfig.AD_CONFIG,binding.frBanner,R.layout.ad_native_fullscreen){
                             Utils.getInstance().replaceActivity(this@SplashActivity, MainActivity::class.java)
                         }
                     }

@@ -180,26 +180,15 @@ object AdsHolder {
 
     fun loadAndShowNative(
         activity: Activity,
-        nativeAdContainer: ViewGroup,layout : Int,size: String,
+        nativeAdContainer: ViewGroup,layout : Int,size: GoogleENative,
         nativeHolder: NativeHolderAdmob,
     ) {
-        val native_size = when (size) {
-            "1" -> {
-                GoogleENative.UNIFIED_MEDIUM
-            }
-            "2" -> {
-                GoogleENative.UNIFIED_SMALL
-            }
-            else -> {
-                GoogleENative.UNIFIED_BANNER
-            }
-        }
         AdmobUtils.loadAndShowNativeAdsWithLayoutAds(
             activity,
             nativeHolder,
             nativeAdContainer,
             layout,
-            native_size,
+            size,
             object : AdmobUtils.NativeAdCallbackNew {
                 override fun onLoadedAndGetNativeAd(ad: NativeAd?) {
 
@@ -217,6 +206,40 @@ object AdsHolder {
                 }
 
                 override fun onClickAds() {
+                }
+            })
+    }
+
+    fun loadAndShowNativeCollapsible(
+        activity: Activity,
+        nativeAdContainer: ViewGroup,layout : Int,size: GoogleENative,
+        nativeHolder: NativeHolderAdmob,onLoaded: () -> Unit,onClose: () -> Unit
+    ) {
+        AdmobUtils.loadAndShowNativeAdsWithLayoutAdsCollapsible(
+            activity,
+            nativeHolder,
+            nativeAdContainer,
+            layout,
+            size,
+            object : AdmobUtils.NativeAdCallbackNew {
+                override fun onLoadedAndGetNativeAd(ad: NativeAd?) {
+
+                }
+
+                override fun onNativeAdLoaded() {
+                    onLoaded()
+                }
+
+                override fun onAdFail(error: String) {
+                    nativeAdContainer.visibility = View.VISIBLE
+                }
+
+                override fun onAdPaid(adValue: AdValue?, adUnitAds: String?) {
+
+                }
+
+                override fun onClickAds() {
+                    onClose()
                 }
             })
     }

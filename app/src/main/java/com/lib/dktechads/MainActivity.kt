@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         val nativeAds = findViewById<FrameLayout>(R.id.nativead)
         bannerContainer = findViewById<FrameLayout>(R.id.banner_container)
 
-        com.ads.detech.ads.AdsManager.showNativePreload(this,"native_preload",binding.nativead,R.layout.ad_template_medium)
+        com.ads.detech.ads.AdsManager.showNativePreload(this,"native_preload",binding.nativead)
 
         binding.btnShowNative.setOnClickListener {
             AdsManager.showAdsNative(this,AdsManager.nativeHolder,nativeAds)
@@ -304,7 +304,7 @@ class MainActivity : AppCompatActivity() {
 //                    binding.nativead.layoutParams = params
 //                }
 //            })
-            com.ads.detech.ads.AdsManager.showAdsBannerNative(this@MainActivity,"ads_banner_native",binding.nativead,R.layout.ad_template_medium)
+            com.ads.detech.ads.AdsManager.showAdsBannerNative(this@MainActivity,"ads_banner_native",binding.nativead)
         }
         
         binding.loadReward.setOnClickListener { 

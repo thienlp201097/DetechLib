@@ -223,9 +223,8 @@
             <FrameLayout
                 android:id="@+id/nativead"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/btn_show_native"
-                android:minHeight="300dp"
                 app:layout_constraintTop_toBottomOf="@id/loadAndShowNativeAdmob" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
