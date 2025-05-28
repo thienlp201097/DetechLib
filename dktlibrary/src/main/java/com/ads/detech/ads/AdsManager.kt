@@ -122,7 +122,8 @@ object AdsManager {
         val displayInterval = adsConfig.count.toIntOrNull() ?: 1
         val shouldShow = AdsHolder.increaseAndCheck(key, displayInterval)
 
-        if (shouldShow && displayInterval > 1) {
+        if (shouldShow) {
+            Log.e("showAdsInterstitial", "Dãn cách hiển thị qc")
             onAction()
             return
         }
