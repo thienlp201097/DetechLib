@@ -349,11 +349,11 @@ object AdsHolder {
             object :
                 AdmobUtils.AdsNativeCallBackAdmod {
                 override fun NativeFailed(massage: String) {
-
+                    nativeAdContainer.gone()
                 }
 
                 override fun NativeLoaded() {
-
+                    nativeAdContainer.visible()
                 }
 
                 override fun onPaid(adValue: AdValue?, adUnitAds: String?) {
@@ -374,7 +374,7 @@ object AdsHolder {
             GoogleENative.UNIFIED_MEDIUM,
             object : AdmobUtils.AdsNativeCallBackAdmod {
                 override fun NativeLoaded() {
-
+                    nativeAdContainer.visible()
                 }
 
                 override fun onPaid(adValue: AdValue?, adUnitAds: String?) {
