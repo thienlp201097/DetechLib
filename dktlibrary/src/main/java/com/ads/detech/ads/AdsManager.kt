@@ -1,13 +1,11 @@
 package com.ads.detech.ads
 
 import android.app.Activity
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.ads.detech.AdmobUtils
 import com.ads.detech.AdmobUtils.isShowAds
@@ -50,39 +48,46 @@ object AdsManager {
     }
     const val TAG = "==AdsManager=="
 
-    fun showAdsSplash(activity: AppCompatActivity, key: String, viewGroup: ViewGroup , layout_native : Int, onAction: () -> Unit) {
+    fun showAdsSplash(activity: AppCompatActivity, key: String, viewGroup: ViewGroup, layout_native_full : Int, onAction: () -> Unit) {
         if (isTestDevice || !AdmobUtils.isNetworkConnected(activity) || !isShowAds) {
             Log.d(TAG, "showAdsSplash: Bỏ qua quảng cáo (Test Device hoặc Không có mạng hoặc tắt quảng cáo)")
             onAction()
             return
         }
 
-        try {
-            val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
-            val adsConfig = Gson().fromJson(jsonStr, AdsConfig::class.java)
-            if (adsConfig.banner_splash == "1"){
-                AdmobUtils.loadAdBanner(activity, adsConfig.units.banner, viewGroup, object :
-                    AdmobUtils.BannerCallBack {
-                    override fun onClickAds() {
+        val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
+        if (jsonStr.isBlank()) {
+            Log.w("showAdsInterstitial", "⚠️ Không tìm thấy cấu hình cho key: $key")
+            return
+        }
+        val adsConfig = try {
+            Gson().fromJson(jsonStr, AdsConfig::class.java)
+        } catch (e: Exception) {
+            Log.e("showAdsInterstitial", "❌ Lỗi parse JSON: $jsonStr", e)
+            return
+        }
+        if (adsConfig.banner_splash == "1"){
+            AdmobUtils.loadAdBanner(activity, adsConfig.units.banner, viewGroup, object :
+                AdmobUtils.BannerCallBack {
+                override fun onClickAds() {
 
-                    }
+                }
 
-                    override fun onFailed(message: String) {
-                        checkAdsSplash(activity,adsConfig,layout_native,onAction)
-                    }
+                override fun onFailed(message: String) {
+                    checkAdsSplash(activity,adsConfig,layout_native_full,onAction)
+                }
 
-                    override fun onLoad() {
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            checkAdsSplash(activity,adsConfig,layout_native,onAction)
-                        }, 1500)
-                    }
+                override fun onLoad() {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        checkAdsSplash(activity,adsConfig,layout_native_full,onAction)
+                    }, 1500)
+                }
 
-                    override fun onPaid(adValue: AdValue?, mAdView: AdView?) {
-                    }
-                })
-            }
-        }catch (_ : Exception){
-            onAction()
+                override fun onPaid(adValue: AdValue?, mAdView: AdView?) {
+                }
+            })
+        }else{
+            checkAdsSplash(activity,adsConfig,layout_native_full,onAction)
         }
     }
 
