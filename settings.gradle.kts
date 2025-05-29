@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "DktechAds"
+rootProject.name = "DetechAds"
 include(":app")
 include(":dktlibrary")

@@ -34,10 +34,10 @@ class SplashActivity : AppCompatActivity() {
         val binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         com.ads.detech.ads.AdsManager.initNativeLayouts(listOf(
-            R.layout.ad_template_medium,
-            R.layout.ad_template_small,
-            R.layout.ad_template_smallest,
-            R.layout.ad_template_mediumcollapsible
+            R.layout.ad_template_medium,//native big
+            R.layout.ad_template_small,//native small
+            R.layout.ad_template_smallest,//native banner
+            R.layout.ad_template_mediumcollapsible// native collapsible
         ))
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
