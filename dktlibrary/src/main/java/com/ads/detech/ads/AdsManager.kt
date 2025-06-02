@@ -222,6 +222,7 @@ object AdsManager {
         }
     }
 
+
     fun preloadNative(activity: Activity, key: String){
         if (isTestDevice || !AdmobUtils.isNetworkConnected(activity) || !isShowAds) {
             Log.d(TAG, "PreloadNative: Bỏ qua quảng cáo (Test Device hoặc Không có mạng hoặc tắt quảng cáo)")
@@ -276,7 +277,80 @@ object AdsManager {
             "4" -> nativeLayouts.getOrNull(3) ?: DEFAULT_LAYOUT_COLLAPSIBLE
             else -> DEFAULT_LAYOUT_MEDIUM
         }
-        AdsHolder.showNative(activity,viewGroup,layoutId,nativeHolder)
+
+        val size_layout = when (adsConfig.type) {
+            "1" -> GoogleENative.UNIFIED_MEDIUM
+            "2" -> GoogleENative.UNIFIED_SMALL
+            "3" -> GoogleENative.UNIFIED_BANNER
+            "4" -> GoogleENative.UNIFIED_MEDIUM
+            else -> GoogleENative.UNIFIED_MEDIUM
+        }
+        AdsHolder.showNative(activity,viewGroup,layoutId,size_layout,nativeHolder)
+    }
+
+    fun showNativePreloadWithLayout(activity: Activity, key: String,viewGroup: ViewGroup, layout_native: Int){
+        if (isTestDevice || !AdmobUtils.isNetworkConnected(activity) || !isShowAds) {
+            viewGroup.gone()
+            Log.d(TAG, "showNativePreload: Bỏ qua quảng cáo (Test Device hoặc Không có mạng hoặc tắt quảng cáo)")
+            return
+        }
+        val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
+        if (jsonStr.isBlank()) {
+            Log.w("showNativePreload", "⚠️ Không tìm thấy cấu hình cho key: $key")
+            return
+        }
+        val adsConfig = try {
+            Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
+        } catch (e: Exception) {
+            Log.e("showNativePreload", "❌ Lỗi parse JSON: $jsonStr", e)
+            return
+        }
+        val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
+        if (adsConfig.type == "0"){
+            Log.d(TAG, "showNativePreload: Native $key Off")
+            viewGroup.gone()
+            return
+        }
+        val size_layout = when (adsConfig.type) {
+            "1" -> GoogleENative.UNIFIED_MEDIUM
+            "2" -> GoogleENative.UNIFIED_SMALL
+            "3" -> GoogleENative.UNIFIED_BANNER
+            "4" -> GoogleENative.UNIFIED_MEDIUM
+            else -> GoogleENative.UNIFIED_MEDIUM
+        }
+        AdsHolder.showNative(activity,viewGroup,layout_native,size_layout,nativeHolder)
+    }
+
+    fun loadAndShowNativeWithLayout(activity: Activity, key: String,viewGroup: ViewGroup, layout_native: Int){
+        if (isTestDevice || !AdmobUtils.isNetworkConnected(activity) || !isShowAds) {
+            viewGroup.gone()
+            Log.d(TAG, "showNativePreload: Bỏ qua quảng cáo (Test Device hoặc Không có mạng hoặc tắt quảng cáo)")
+            return
+        }
+        val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
+        if (jsonStr.isBlank()) {
+            Log.w("showNativePreload", "⚠️ Không tìm thấy cấu hình cho key: $key")
+            return
+        }
+        val adsConfig = try {
+            Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
+        } catch (e: Exception) {
+            Log.e("showNativePreload", "❌ Lỗi parse JSON: $jsonStr", e)
+            return
+        }
+        val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
+        if (adsConfig.type == "0"){
+            Log.d(TAG, "showNativePreload: Native $key Off")
+            viewGroup.gone()
+            return
+        }
+        val size_layout = when (adsConfig.type) {
+            "1" -> GoogleENative.UNIFIED_MEDIUM
+            "2" -> GoogleENative.UNIFIED_SMALL
+            "3" -> GoogleENative.UNIFIED_BANNER
+            else -> GoogleENative.UNIFIED_MEDIUM
+        }
+        AdsHolder.loadAndShowNative(activity,viewGroup,layout_native,size_layout,nativeHolder)
     }
 
     fun preloadNativeFullScreen(activity: Activity, key: String,onFail: () -> Unit){

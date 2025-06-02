@@ -364,14 +364,14 @@ object AdsHolder {
 
     fun showNative(
         activity: Activity,
-        nativeAdContainer: ViewGroup,layout : Int,
+        nativeAdContainer: ViewGroup,layout : Int,size: GoogleENative,
         nativeHolder: NativeHolderAdmob,
     ) {
         AdmobUtils.showNativeAdsWithLayout(activity,
             nativeHolder,
             nativeAdContainer,
             layout,
-            GoogleENative.UNIFIED_MEDIUM,
+            size,
             object : AdmobUtils.AdsNativeCallBackAdmod {
                 override fun NativeLoaded() {
                     nativeAdContainer.visible()
