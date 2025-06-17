@@ -65,6 +65,9 @@ object AdsHolder {
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun increaseAndCheck(key: String, interval: Int): Boolean {
+        if (interval == 0){
+            return false
+        }
         val current = countMap.getOrDefault(key, 0) + 1
         countMap[key] = current
         return current % interval == 0
