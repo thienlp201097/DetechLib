@@ -21,7 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:background="@color/applovin_sdk_brand_color"
         android:padding="2dp"
         android:text="Ad"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
