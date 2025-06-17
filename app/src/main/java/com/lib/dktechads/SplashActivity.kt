@@ -1,27 +1,19 @@
 package com.lib.dktechads
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ads.detech.AdmobUtils
 import com.ads.detech.AppOpenManager
-import com.ads.detech.ApplovinUtil
 import com.ads.detech.R
 import com.ads.detech.ads.AdsHolder.TAG
-import com.ads.detech.callback_applovin.NativeCallBackNew
 import com.ads.detech.firebase.FireBaseConfig
 import com.ads.detech.utils.Utils
 import com.ads.detech.utils.admod.callback.MobileAdsListener
-import com.applovin.mediation.MaxAd
-import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.lib.dktechads.databinding.ActivitySplashBinding
-import com.lib.dktechads.utils.AdsManager
-import com.lib.dktechads.utils.AdsManagerAdmod
 import java.util.concurrent.atomic.AtomicBoolean
 
 

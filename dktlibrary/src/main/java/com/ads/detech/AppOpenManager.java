@@ -12,20 +12,16 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
-import com.ads.detech.adjust.AdjustUtils;
 import com.google.android.gms.ads.AdActivity;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdValue;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.OnPaidEventListener;
 import com.google.android.gms.ads.appopen.AppOpenAd;
 
 import java.util.ArrayList;
@@ -390,10 +386,7 @@ public class AppOpenManager implements Application.ActivityLifecycleCallbacks, L
                 if (currentActivity.getClass() == AdActivity.class){
                     return;
                 }
-                if (ApplovinUtil.INSTANCE.isClickAds()){
-                    ApplovinUtil.INSTANCE.setClickAds(false);
-                    return;
-                }
+
                 if(AdmobUtils.isAdShowing){
                     return;
                 }

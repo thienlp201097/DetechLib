@@ -41,6 +41,7 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/ln2"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ln1"
@@ -90,6 +91,7 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/ln4"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ln3"
@@ -132,6 +134,7 @@
 
                 <Button
                     android:id="@+id/banner_max"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/load_native"

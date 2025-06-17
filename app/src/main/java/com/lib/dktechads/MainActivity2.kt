@@ -1,13 +1,8 @@
 package com.lib.dktechads
 
 import android.os.Bundle
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.ads.detech.ApplovinUtil
-import com.ads.detech.callback_applovin.InterstititialCallback
-import com.applovin.mediation.MaxAd
 import com.lib.dktechads.databinding.ActivityMain2Binding
-import com.lib.dktechads.utils.AdsManager
 import com.lib.dktechads.utils.AdsManagerAdmod
 
 class MainActivity2 : AppCompatActivity() {

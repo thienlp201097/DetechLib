@@ -1,6 +1,7 @@
 package com.ads.detech.ads
 
 import android.app.Activity
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -17,7 +18,6 @@ import com.ads.detech.firebase.inter.AdsInterConfig
 import com.ads.detech.firebase.native_preload.AdsNativeConfig
 import com.ads.detech.firebase.splash.AdsConfig
 import com.ads.detech.utils.admod.NativeHolderAdmob
-import com.applovin.sdk.AppLovinSdkUtils
 import com.google.android.gms.ads.AdValue
 import com.google.android.gms.ads.AdView
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -196,17 +196,17 @@ object AdsManager {
                     }
                     "4" ->{
                         val params: ViewGroup.LayoutParams = viewGroup.layoutParams
-                        params.height = AppLovinSdkUtils.dpToPx(activity, 230)
+                        params.height = activity.dpToPx(230)
                         viewGroup.layoutParams = params
                         AdsHolder.loadAndShowNativeCollapsible(activity,viewGroup,layoutId,GoogleENative.UNIFIED_MEDIUM,AdsHolder.NATIVE,
                             onLoaded = {
                                 viewGroup.layoutParams = viewGroup.layoutParams.apply {
-                                    height = AppLovinSdkUtils.dpToPx(activity, 330)
+                                    height = activity.dpToPx(330)
                                 }
                             },
                             onClose = {
                                 viewGroup.layoutParams = viewGroup.layoutParams.apply {
-                                    height = AppLovinSdkUtils.dpToPx(activity, 80)
+                                    height = activity.dpToPx(80)
                                 }
                             })
                     }
@@ -222,6 +222,9 @@ object AdsManager {
         }
     }
 
+    fun Context.dpToPx(dp: Int): Int {
+        return (dp * resources.displayMetrics.density).toInt()
+    }
 
     fun preloadNative(activity: Activity, key: String){
         if (isTestDevice || !AdmobUtils.isNetworkConnected(activity) || !isShowAds) {

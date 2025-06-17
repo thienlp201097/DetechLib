@@ -10,28 +10,18 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ads.detech.AdmobUtils
-import com.ads.detech.ApplovinUtil
-import com.ads.detech.GoogleENative
-import com.ads.detech.callback_applovin.BannerCallback
-import com.ads.detech.callback_applovin.NativeCallBackNew
-import com.ads.detech.callback_applovin.RewardCallback
 import com.ads.detech.utils.admod.RewardHolderAdmob
 import com.ads.detech.utils.admod.RewardedInterstitialHolderAdmob
 import com.ads.detech.utils.admod.callback.AdLoadCallback
-import com.ads.detech.utils.admod.callback.AdsInterCallBack
 import com.ads.detech.utils.admod.callback.RewardAdCallback
 import com.ads.detech.utils.admod.remote.BannerPlugin
-import com.applovin.mediation.MaxAd
 import com.applovin.mediation.nativeAds.MaxNativeAdLoader
-import com.applovin.mediation.nativeAds.MaxNativeAdView
-import com.applovin.sdk.AppLovinSdkUtils
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdValue
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MediaAspectRatio
 import com.google.android.gms.ads.nativead.NativeAd
 import com.lib.dktechads.databinding.ActivityMainBinding
-import com.lib.dktechads.utils.AdsManager
 import com.lib.dktechads.utils.AdsManagerAdmod
 
 class MainActivity : AppCompatActivity() {
@@ -51,21 +41,15 @@ class MainActivity : AppCompatActivity() {
         com.ads.detech.ads.AdsManager.showNativePreload(this,"native_preload",binding.nativead)
 
         binding.btnShowNative.setOnClickListener {
-            AdsManager.showAdsNative(this,AdsManager.nativeHolder,nativeAds)
         }
         binding.btnLoadInter.setOnClickListener {
             AdsManagerAdmod.loadInter(this, AdsManagerAdmod.interholder)
         }
         binding.btnLoadInterAppLovin.setOnClickListener {
-            AdsManager.loadInter(this)
         }
 
         binding.btnShowInterAppLovin.setOnClickListener {
-            AdsManager.showInter(this, AdsManager.interHolder, object : AdsManager.AdsOnClick {
-                override fun onAdsCloseOrFailed() {
-                    startActivity(Intent(this@MainActivity, MainActivity2::class.java))
-                }
-            })
+
         }
 
         binding.btnShowInter.setOnClickListener {
@@ -87,83 +71,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnLoadShowInterCallback2.setOnClickListener {
-            AdsManager.loadAndShowIntersial(this,AdsManager.interHolder,object : AdsManager.AdsOnClick{
-                override fun onAdsCloseOrFailed() {
-                    startActivity(Intent(this@MainActivity, MainActivity2::class.java))
-                }
-            })
+
         }
 
         binding.btnShowReward.setOnClickListener {
-            ApplovinUtil.loadReward(this, "c10d259dcb47378d", 15000, object : RewardCallback {
-                override fun onRewardReady() {
-                    ApplovinUtil.showRewardWithDialogCheckTime(
-                        this@MainActivity,
-                        1500,
-                        object : RewardCallback {
-                            override fun onRewardReady() {
-
-                            }
-
-                            override fun onRewardClosed() {
-                                Toast.makeText(
-                                    this@MainActivity,
-                                    "onRewardClosed",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                            override fun onRewardLoadFail(error: String) {
-                            }
-
-                            override fun onRewardShowSucceed() {
-                            }
-
-                            override fun onUserRewarded() {
-                                Toast.makeText(
-                                    this@MainActivity,
-                                    "onUserRewarded",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                            override fun onRewardedVideoStarted() {
-                            }
-
-                            override fun onRewardedVideoCompleted() {
-                                Toast.makeText(
-                                    this@MainActivity,
-                                    "onRewardedVideoCompleted",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                            override fun onAdRevenuePaid(ad: MaxAd?) {
-                            }
-                        })
-                }
-
-                override fun onRewardClosed() {
-                }
-
-                override fun onRewardLoadFail(error: String) {
-                }
-
-                override fun onRewardShowSucceed() {
-                }
-
-                override fun onUserRewarded() {
-                }
-
-                override fun onRewardedVideoStarted() {
-                }
-
-                override fun onRewardedVideoCompleted() {
-                }
-
-                override fun onAdRevenuePaid(ad: MaxAd?) {
-                }
-            })
         }
 
         binding.loadNative.setOnClickListener {
@@ -171,20 +82,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.loadNativeMax.setOnClickListener {
-            ApplovinUtil.loadNativeAds(this,AdsManager.nativeHolder,object : NativeCallBackNew {
-                override fun onNativeAdLoaded(nativeAd: MaxAd?, nativeAdView: MaxNativeAdView?) {
-                    Toast.makeText(this@MainActivity,"Loaded", Toast.LENGTH_SHORT).show()
-                }
 
-                override fun onAdFail(error: String) {
-                    Toast.makeText(this@MainActivity,"Failed", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onAdRevenuePaid(ad: MaxAd) {
-
-                }
-
-            })
         }
 
         binding.showNative.setOnClickListener {
@@ -192,20 +90,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.showNativeMax.setOnClickListener {
-            ApplovinUtil.showNativeWithLayout(nativeAds,this,AdsManager.nativeHolder,R.layout.native_custom_ad_view,GoogleENative.UNIFIED_MEDIUM,object :
-                NativeCallBackNew {
-                override fun onNativeAdLoaded(nativeAd: MaxAd?, nativeAdView: MaxNativeAdView?) {
-                    Toast.makeText(this@MainActivity,"show success", Toast.LENGTH_SHORT).show()
-                }
 
-                override fun onAdFail(error: String) {
-                    Toast.makeText(this@MainActivity,"Show failed", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onAdRevenuePaid(ad: MaxAd) {
-
-                }
-            })
         }
         binding.loadBanner.setOnClickListener {
             AdmobUtils.loadAndShowBannerWithConfig(this,"",5,10,binding.bannerContainer,
@@ -227,18 +112,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.bannerMax.setOnClickListener {
-            ApplovinUtil.showBanner(this, binding.bannerContainer, "f443c90308f39f17", object :
-                BannerCallback {
-                override fun onBannerLoadFail(error: String) {
-                }
 
-                override fun onBannerShowSucceed() {
-                }
-
-                override fun onAdRevenuePaid(ad: MaxAd) {
-
-                }
-            })
         }
 
         binding.btnLoadShowInterAdmob.setOnClickListener {
