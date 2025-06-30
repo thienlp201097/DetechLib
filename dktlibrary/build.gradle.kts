@@ -83,4 +83,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-config")
+
+    implementation("com.facebook.android:facebook-android-sdk:18.0.3")
 }

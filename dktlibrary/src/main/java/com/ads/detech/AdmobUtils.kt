@@ -39,6 +39,8 @@ import com.ads.detech.utils.admod.callback.NativeFullScreenCallBack
 import com.ads.detech.utils.admod.callback.RewardAdCallback
 import com.ads.detech.utils.admod.remote.BannerPlugin
 import com.airbnb.lottie.LottieAnimationView
+import com.facebook.appevents.AppEventsConstants
+import com.facebook.appevents.AppEventsLogger
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdError
@@ -137,6 +139,15 @@ object AdmobUtils {
         }
     }
 
+    fun adImpressionFacebookSDK(context: Context, ad: AdValue) {
+        val logger = AppEventsLogger.newLogger(context)
+        val params = Bundle()
+        params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, ad.currencyCode)
+        logger.logEvent(
+            AppEventsConstants.EVENT_NAME_AD_IMPRESSION, ad.valueMicros / 1000000.0, params
+        )
+    }
+
     fun initListIdTest() {
         testDevices.add("D4A597237D12FDEC52BE6B2F15508BB")
     }
@@ -198,7 +209,7 @@ object AdmobUtils {
         shimmerFrameLayout?.startShimmer()
         mAdView.onPaidEventListener =
             OnPaidEventListener { adValue ->
-
+                adImpressionFacebookSDK(activity,adValue)
             }
         mAdView.adListener = object : AdListener() {
             override fun onAdLoaded() {
@@ -280,7 +291,7 @@ object AdmobUtils {
             override fun onAdLoaded() {
                 banner.mAdView?.onPaidEventListener =
                     OnPaidEventListener { adValue ->
-
+                        adImpressionFacebookSDK(activity,adValue)
                     }
                 shimmerFrameLayout?.stopShimmer()
                 viewGroup.removeView(tagView)
@@ -520,7 +531,7 @@ object AdmobUtils {
                 nativeAd.setOnPaidEventListener { adValue: AdValue? ->
                     adValue?.let {
                         adCallback.onPaid(adValue, nativeHolder.ads)
-
+                        adImpressionFacebookSDK(context,it)
                     }
                 }
                 adCallback.onLoadedAndGetNativeAd(nativeAd)
@@ -620,6 +631,7 @@ object AdmobUtils {
             nativeHolder.native_mutable.observe((activity as LifecycleOwner)) { nativeAd: NativeAd? ->
                 if (nativeAd != null) {
                     nativeAd.setOnPaidEventListener {
+                        adImpressionFacebookSDK(activity,it)
                         callback.onPaid(it, nativeHolder.ads)
                     }
                     val adView = activity.layoutInflater.inflate(layout, null) as NativeAdView
@@ -718,6 +730,7 @@ object AdmobUtils {
                 }
 
                 nativeAd.setOnPaidEventListener { adValue: AdValue ->
+                    adImpressionFacebookSDK(activity,adValue)
                     adCallback.onAdPaid(adValue, s)
                 }
                 //viewGroup.setVisibility(View.VISIBLE);
@@ -804,6 +817,7 @@ object AdmobUtils {
                 }
 
                 nativeAd.setOnPaidEventListener { adValue: AdValue ->
+                    adImpressionFacebookSDK(activity,adValue)
                     adCallback.onAdPaid(adValue, s)
                 }
                 //viewGroup.setVisibility(View.VISIBLE);
@@ -951,7 +965,7 @@ object AdmobUtils {
 
                     mInterstitialAd?.apply {
                         onPaidEventListener = OnPaidEventListener { adValue ->
-
+                            adImpressionFacebookSDK(activity, adValue)
                         }
 
                         fullScreenContentCallback = object : FullScreenContentCallback() {
@@ -2084,7 +2098,7 @@ object AdmobUtils {
             nativeHolder.native_mutable.value = nativeAd
             checkAdsTest(nativeAd)
             nativeAd.setOnPaidEventListener { adValue: AdValue? ->
-
+                adValue?.let { adImpressionFacebookSDK(context, it) }
             }
             adCallback.onLoadedAndGetNativeAd(nativeAd)
         }
@@ -2144,7 +2158,7 @@ object AdmobUtils {
             nativeHolder.native_mutable.value = nativeAd
             checkAdsTest(nativeAd)
             nativeAd.setOnPaidEventListener { adValue: AdValue? ->
-
+                adValue?.let { adImpressionFacebookSDK(context, it) }
             }
             adCallback.onLoadedAndGetNativeAd(nativeAd)
         }
@@ -2222,6 +2236,7 @@ object AdmobUtils {
             nativeHolder.native_mutable.observe((activity as LifecycleOwner)) { nativeAd: NativeAd? ->
                 if (nativeAd != null) {
                     nativeAd.setOnPaidEventListener {
+                        adImpressionFacebookSDK(activity,it)
                     }
 
                     val adView = activity.layoutInflater.inflate(layout, null) as NativeAdView

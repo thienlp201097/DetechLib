@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.ads.detech.AOAManager
 import com.ads.detech.AdmobUtils
+import com.ads.detech.AdmobUtils.adImpressionFacebookSDK
 import com.ads.detech.AdmobUtils.isTestDevice
 import com.ads.detech.AppOpenManager
 import com.ads.detech.CollapsibleBanner
@@ -82,7 +83,9 @@ object AdsHolder {
                 onAction()
             }
 
-            override fun onAdPaid(adValue: AdValue, adUnitAds: String) {}
+            override fun onAdPaid(adValue: AdValue, adUnitAds: String) {
+                adImpressionFacebookSDK(activity, adValue)
+            }
             override fun onAdsLoaded() {}
         })
         manager.loadAoA()
