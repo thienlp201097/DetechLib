@@ -358,6 +358,7 @@ object AdsManager {
 
     fun preloadNativeFullScreen(activity: Activity, key: String,onFail: () -> Unit){
         if (isTestDevice || !AdmobUtils.isNetworkConnected(activity) || !isShowAds) {
+            onFail()
             Log.d(TAG, "preloadNativeFullScreen: Bỏ qua quảng cáo (Test Device hoặc Không có mạng hoặc tắt quảng cáo)")
             return
         }
