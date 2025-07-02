@@ -219,7 +219,7 @@ object AdsHolder {
     fun loadAndShowNativeCollapsible(
         activity: Activity,
         nativeAdContainer: ViewGroup,layout : Int,size: GoogleENative,
-        nativeHolder: NativeHolderAdmob,onLoaded: () -> Unit,onClose: () -> Unit
+        nativeHolder: NativeHolderAdmob,onLoaded: () -> Unit,onClose: () -> Unit,onFail: () -> Unit
     ) {
         AdmobUtils.loadAndShowNativeAdsWithLayoutAdsCollapsible(
             activity,
@@ -237,6 +237,7 @@ object AdsHolder {
                 }
 
                 override fun onAdFail(error: String) {
+                    onFail()
                     nativeAdContainer.visibility = View.VISIBLE
                 }
 

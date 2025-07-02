@@ -208,7 +208,14 @@ object AdsManager {
                                 viewGroup.layoutParams = viewGroup.layoutParams.apply {
                                     height = activity.dpToPx(80)
                                 }
-                            })
+                            },
+                            onFail = {
+                                viewGroup.layoutParams = viewGroup.layoutParams.apply {
+                                    height = activity.dpToPx(1)
+                                }
+                                viewGroup.gone()
+                            }
+                        )
                     }
                     else -> {
                         AdsHolder.loadAndShowNative(activity,viewGroup,nativeLayouts.getOrNull(1) ?: DEFAULT_LAYOUT_SMALL,GoogleENative.UNIFIED_SMALL,AdsHolder.NATIVE)
