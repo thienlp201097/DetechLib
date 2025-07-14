@@ -71,7 +71,7 @@ dependencies {
     implementation("com.facebook.shimmer:shimmer:0.5.0@aar")
 
     // Ads
-    implementation("com.google.android.gms:play-services-ads:24.3.0")
+    implementation("com.google.android.gms:play-services-ads:24.4.0")
     implementation("com.intuit.sdp:sdp-android:1.1.1")
 
     // Other

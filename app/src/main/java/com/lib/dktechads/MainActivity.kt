@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         val nativeAds = findViewById<FrameLayout>(R.id.nativead)
         bannerContainer = findViewById<FrameLayout>(R.id.banner_container)
 
-        com.ads.detech.ads.AdsManager.showNativePreload(this,"native_preload",binding.nativead)
+//        com.ads.detech.ads.AdsManager.showNativePreload(this,"native_preload",binding.nativead)
 
         binding.btnShowNative.setOnClickListener {
         }
@@ -264,7 +264,24 @@ class MainActivity : AppCompatActivity() {
 //
 //                }
 //            })
+        AdmobUtils.loadAdBannerWithAdsSize(this,"",binding.bannerContainer,AdSize.MEDIUM_RECTANGLE, object : AdmobUtils.BannerCallBack{
+            override fun onClickAds() {
+                
+            }
 
+            override fun onLoad() {
+                Log.d("==Banner==", "onLoad: ")
+            }
+
+            override fun onFailed(message: String) {
+                Log.d("==Banner==", "onFailed: ")
+            }
+
+            override fun onPaid(adValue: AdValue?, mAdView: AdView?) {
+                
+            }
+
+        })
         AdmobUtils.loadAndGetNativeFullScreenAds(this,AdsManagerAdmod.nativeHolderFull,MediaAspectRatio.ANY,
             object : AdmobUtils.NativeAdCallbackNew {
                 override fun onLoadedAndGetNativeAd(ad: NativeAd?) {

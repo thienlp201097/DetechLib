@@ -239,6 +239,65 @@ object AdmobUtils {
         Log.e(" Admod", "loadAdBanner")
     }
 
+    @JvmStatic
+    fun loadAdBannerWithAdsSize(
+        activity: Activity,
+        bannerId: String?,
+        viewGroup: ViewGroup,adSize: AdSize,
+        bannerAdCallback: BannerCallBack
+    ) {
+
+        if (isTestDevice){
+            bannerAdCallback.onFailed("None Show")
+            return
+        }
+        var bannerId = bannerId
+        if (!isShowAds || !isNetworkConnected(activity)) {
+            viewGroup.visibility = View.GONE
+            bannerAdCallback.onFailed("None Show")
+            return
+        }
+        val mAdView = AdView(activity)
+        if (isTesting) {
+            bannerId = activity.getString(R.string.test_ads_admob_banner_id)
+        }
+        mAdView.adUnitId = bannerId!!
+        mAdView.setAdSize(adSize)
+        val adRequest = AdRequest.Builder().build()
+
+        try {
+            viewGroup.addView(mAdView)
+        } catch (_: Exception) {
+
+        }
+        mAdView.onPaidEventListener =
+            OnPaidEventListener { adValue ->
+                adImpressionFacebookSDK(activity,adValue)
+            }
+        mAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                bannerAdCallback.onLoad()
+            }
+
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                Log.e(" Admod", "failloadbanner" + adError.message)
+                bannerAdCallback.onFailed(adError.message)
+            }
+
+            override fun onAdOpened() {}
+            override fun onAdClicked() {
+                bannerAdCallback.onClickAds()
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
+        mAdView.loadAd(adRequest)
+        Log.e(" Admod", "loadAdBanner")
+    }
+
     interface BannerCollapsibleAdCallback {
         fun onClickAds()
         fun onBannerAdLoaded(adSize: AdSize)
