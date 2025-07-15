@@ -393,6 +393,39 @@ object AdsHolder {
             })
     }
 
+    fun showNativeCollapsible(
+        activity: Activity,
+        nativeAdContainer: ViewGroup,layout : Int,size: GoogleENative,
+        nativeHolder: NativeHolderAdmob,
+    ) {
+        AdmobUtils.showNativeAdsWithLayoutCollapsible(activity,
+            nativeHolder,
+            nativeAdContainer,
+            layout,
+            size,
+            object : AdmobUtils.NativeAdCallbackNew {
+                override fun onLoadedAndGetNativeAd(ad: NativeAd?) {
+
+                }
+
+                override fun onNativeAdLoaded() {
+                    nativeAdContainer.visible()
+                }
+
+                override fun onAdFail(error: String) {
+                    nativeAdContainer.gone()
+                }
+
+                override fun onAdPaid(adValue: AdValue?, adUnitAds: String?) {
+                    
+                }
+
+                override fun onClickAds() {
+                    
+                }
+            })
+    }
+
     fun showNativeSmall(
         activity: Activity,
         nativeAdContainer: ViewGroup,layout : Int,

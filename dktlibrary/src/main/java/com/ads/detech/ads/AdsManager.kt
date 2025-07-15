@@ -58,12 +58,14 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         if (jsonStr.isBlank()) {
             Log.w("showAdsInterstitial", "⚠️ Không tìm thấy cấu hình cho key: $key")
+            onAction()
             return
         }
         val adsConfig = try {
             Gson().fromJson(jsonStr, AdsConfig::class.java)
         } catch (e: Exception) {
             Log.e("showAdsInterstitial", "❌ Lỗi parse JSON: $jsonStr", e)
+            onAction()
             return
         }
         if (adsConfig.banner_splash == "1"){
@@ -115,12 +117,14 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         if (jsonStr.isBlank()) {
             Log.w("showAdsInterstitial", "⚠️ Không tìm thấy cấu hình cho key: $key")
+            onAction()
             return
         }
         val adsConfig = try {
             Gson().fromJson(jsonStr, AdsInterConfig::class.java)
         } catch (e: Exception) {
             Log.e("showAdsInterstitial", "❌ Lỗi parse JSON: $jsonStr", e)
+            onAction()
             return
         }
 
@@ -157,12 +161,14 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         if (jsonStr.isBlank()) {
             Log.w("showAdsBannerNative", "⚠️ Không tìm thấy cấu hình cho key: $key")
+            viewGroup.gone()
             return
         }
         val adsConfig = try {
             Gson().fromJson(jsonStr, AdsBannerNativeConfig::class.java)
         } catch (e: Exception) {
             Log.e("showAdsBannerNative", "❌ Lỗi parse JSON: $jsonStr", e)
+            viewGroup.gone()
             return
         }
 
@@ -266,12 +272,14 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         if (jsonStr.isBlank()) {
             Log.w("showNativePreload", "⚠️ Không tìm thấy cấu hình cho key: $key")
+            viewGroup.gone()
             return
         }
         val adsConfig = try {
             Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
         } catch (e: Exception) {
             Log.e("showNativePreload", "❌ Lỗi parse JSON: $jsonStr", e)
+            viewGroup.gone()
             return
         }
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
@@ -295,7 +303,15 @@ object AdsManager {
             "4" -> GoogleENative.UNIFIED_MEDIUM
             else -> GoogleENative.UNIFIED_MEDIUM
         }
-        AdsHolder.showNative(activity,viewGroup,layoutId,size_layout,nativeHolder)
+        when(adsConfig.type){
+            "4"->{
+                AdsHolder.showNativeCollapsible(activity,viewGroup,layoutId,size_layout,nativeHolder)
+            }
+
+            else -> {
+                AdsHolder.showNative(activity,viewGroup,layoutId,size_layout,nativeHolder)
+            }
+        }
     }
 
     fun showNativePreloadWithLayout(activity: Activity, key: String,viewGroup: ViewGroup, layout_native: Int){
@@ -307,12 +323,14 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         if (jsonStr.isBlank()) {
             Log.w("showNativePreload", "⚠️ Không tìm thấy cấu hình cho key: $key")
+            viewGroup.gone()
             return
         }
         val adsConfig = try {
             Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
         } catch (e: Exception) {
             Log.e("showNativePreload", "❌ Lỗi parse JSON: $jsonStr", e)
+            viewGroup.gone()
             return
         }
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
@@ -340,12 +358,14 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         if (jsonStr.isBlank()) {
             Log.w("showNativePreload", "⚠️ Không tìm thấy cấu hình cho key: $key")
+            viewGroup.gone()
             return
         }
         val adsConfig = try {
             Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
         } catch (e: Exception) {
             Log.e("showNativePreload", "❌ Lỗi parse JSON: $jsonStr", e)
+            viewGroup.gone()
             return
         }
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
@@ -372,12 +392,14 @@ object AdsManager {
         val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
         if (jsonStr.isBlank()) {
             Log.w("preloadNativeFullScreen", "⚠️ Không tìm thấy cấu hình cho key: $key")
+            onFail()
             return
         }
         val adsConfig = try {
             Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
         } catch (e: Exception) {
             Log.e("preloadNativeFullScreen", "❌ Lỗi parse JSON: $jsonStr", e)
+            onFail()
             return
         }
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
