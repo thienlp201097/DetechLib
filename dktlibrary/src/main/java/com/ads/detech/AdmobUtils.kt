@@ -1005,6 +1005,72 @@ object AdmobUtils {
     }
 
     @JvmStatic
+    fun loadAndShowNativeAdsWithLayoutAdsCollapsibleNoShimmer(
+        activity: Activity,
+        nativeHolder: NativeHolderAdmob,
+        viewGroup: ViewGroup,
+        layout: Int,
+        adCallback: NativeAdCallbackNew
+    ) {
+        if (isTestDevice){
+            viewGroup.visibility = View.GONE
+            adCallback.onAdFail("is Test Device")
+            return
+        }
+        if (!isShowAds || !isNetworkConnected(activity)) {
+            viewGroup.visibility = View.GONE
+            return
+        }
+        val adRequest = AdRequest.Builder().build()
+        try {
+            viewGroup.removeAllViews()
+        } catch (_: Exception) {
+
+        }
+        var s = nativeHolder.ads
+        if (isTesting) {
+            s = activity.getString(R.string.test_ads_admob_native_id)
+        }
+        val adLoader = AdLoader.Builder(activity, s)
+            .forNativeAd { nativeAd ->
+                adCallback.onNativeAdLoaded()
+                val adView = activity.layoutInflater
+                    .inflate(layout, null) as NativeAdView
+                populateNativeAdViewClose(nativeAd, adView, GoogleENative.UNIFIED_MEDIUM, adCallback)
+                try {
+                    viewGroup.removeAllViews()
+                    viewGroup.addView(adView)
+                } catch (_: Exception) {
+
+                }
+
+                nativeAd.setOnPaidEventListener { adValue: AdValue ->
+                    adImpressionFacebookSDK(activity,adValue)
+                    adCallback.onAdPaid(adValue, s)
+                }
+                //viewGroup.setVisibility(View.VISIBLE);
+            }.withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.e("Admodfail", "onAdFailedToLoad" + adError.message)
+                    Log.e("Admodfail", "errorCodeAds" + adError.cause)
+                    try {
+                        viewGroup.removeAllViews()
+                    } catch (_: Exception) {
+
+                    }
+                    nativeHolder.isLoad = false
+                    adCallback.onAdFail(adError.message)
+                }
+
+                override fun onAdClicked() {
+                    super.onAdClicked()
+                }
+            })
+            .withNativeAdOptions(NativeAdOptions.Builder().build()).build()
+        adLoader.loadAd(adRequest)
+    }
+
+    @JvmStatic
     fun loadAndShowNativeAdsWithLayoutAdsNoShimmer(
         activity: Activity,
         nativeHolder: NativeHolderAdmob,

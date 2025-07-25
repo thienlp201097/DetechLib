@@ -251,6 +251,40 @@ object AdsHolder {
             })
     }
 
+    fun loadAndShowNativeCollapsibleNoShimmer(
+        activity: Activity,
+        nativeAdContainer: ViewGroup,layout : Int,
+        nativeHolder: NativeHolderAdmob,onLoaded: () -> Unit,onClose: () -> Unit,onFail: () -> Unit
+    ) {
+        AdmobUtils.loadAndShowNativeAdsWithLayoutAdsCollapsibleNoShimmer(
+            activity,
+            nativeHolder,
+            nativeAdContainer,
+            layout,
+            object : AdmobUtils.NativeAdCallbackNew {
+                override fun onLoadedAndGetNativeAd(ad: NativeAd?) {
+
+                }
+
+                override fun onNativeAdLoaded() {
+                    onLoaded()
+                }
+
+                override fun onAdFail(error: String) {
+                    onFail()
+                    nativeAdContainer.visibility = View.VISIBLE
+                }
+
+                override fun onAdPaid(adValue: AdValue?, adUnitAds: String?) {
+
+                }
+
+                override fun onClickAds() {
+                    onClose()
+                }
+            })
+    }
+
 
     fun showAdBanner(activity: Activity, adsEnum: String, view: ViewGroup) {
         AdmobUtils.loadAdBanner(activity, adsEnum, view, object :

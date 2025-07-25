@@ -10,6 +10,11 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ads.detech.AdmobUtils
+import com.ads.detech.GoogleENative
+import com.ads.detech.ads.AdsHolder
+import com.ads.detech.ads.AdsManager.dpToPx
+import com.ads.detech.ads.gone
+import com.ads.detech.ads.visible
 import com.ads.detech.utils.admod.RewardHolderAdmob
 import com.ads.detech.utils.admod.RewardedInterstitialHolderAdmob
 import com.ads.detech.utils.admod.callback.AdLoadCallback
@@ -264,24 +269,18 @@ class MainActivity : AppCompatActivity() {
 //
 //                }
 //            })
-        AdmobUtils.loadAdBannerWithAdsSize(this,"",binding.bannerContainer,AdSize.MEDIUM_RECTANGLE, object : AdmobUtils.BannerCallBack{
-            override fun onClickAds() {
-                
+        AdsHolder.loadAndShowNativeCollapsibleNoShimmer(this,binding.bannerContainer,R.layout.ad_template_mediumcollapsible,
+            AdsHolder.NATIVE,
+            onLoaded = {
+                binding.bannerContainer.visible()
+            },
+            onClose = {
+                binding.bannerContainer.gone()
+            },
+            onFail = {
+                binding.bannerContainer.gone()
             }
-
-            override fun onLoad() {
-                Log.d("==Banner==", "onLoad: ")
-            }
-
-            override fun onFailed(message: String) {
-                Log.d("==Banner==", "onFailed: ")
-            }
-
-            override fun onPaid(adValue: AdValue?, mAdView: AdView?) {
-                
-            }
-
-        })
+        )
         AdmobUtils.loadAndGetNativeFullScreenAds(this,AdsManagerAdmod.nativeHolderFull,MediaAspectRatio.ANY,
             object : AdmobUtils.NativeAdCallbackNew {
                 override fun onLoadedAndGetNativeAd(ad: NativeAd?) {
