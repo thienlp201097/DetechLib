@@ -14,8 +14,8 @@
 
     <ImageView
         android:id="@+id/btnClose"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:src="@drawable/iv_close"
@@ -25,8 +25,8 @@
 
     <TextView
         android:id="@+id/tvTime"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:gravity="center"

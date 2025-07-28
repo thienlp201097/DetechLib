@@ -79,7 +79,7 @@ class NativeFullActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
     }
 
-    fun countDownFlow(from: Int = 5): Flow<Int> = flow {
+    fun countDownFlow(from: Int = 8): Flow<Int> = flow {
         var current = from
         while (current > 0) {
             emit(current)
