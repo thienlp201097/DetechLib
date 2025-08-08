@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ads.detech.AOAManager
 import com.ads.detech.AdmobUtils
 import com.ads.detech.AdmobUtils.adImpressionFacebookSDK
+import com.ads.detech.AdmobUtils.adImpressionSolarEngineSDK
 import com.ads.detech.AdmobUtils.isTestDevice
 import com.ads.detech.AppOpenManager
 import com.ads.detech.CollapsibleBanner

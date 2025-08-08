@@ -11,8 +11,10 @@ import android.view.View
 import android.view.Window
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.ads.detech.AdmobUtils.adImpressionSolarEngineSDK
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdFormat
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdValue
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -165,6 +167,7 @@ class AOAManager(private val activity: Activity,val appOpen: String,val timeOut:
                         } catch (ignored: Exception) {
                         }
                         setOnPaidEventListener {
+                            adImpressionSolarEngineSDK(it,appOpen,6,appOpenAd?.responseInfo?.loadedAdapterResponseInfo)
                             appOpenAdsListener.onAdPaid(it,adUnitId)
                         }
                         show(activity)

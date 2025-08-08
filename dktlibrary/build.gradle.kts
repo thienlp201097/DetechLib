@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.ads.detech"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
@@ -40,9 +40,23 @@ android {
 
 publishing {
     publications {
-        register<MavenPublication>("release") {
+        create<MavenPublication>("release") {
+            groupId = "com.detech"
+            artifactId = "dktlibrary"
+            version = "1.0.0"
+
             afterEvaluate {
                 from(components["release"])
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/thienlp201097/DetechLib")
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
             }
         }
     }
@@ -85,4 +99,9 @@ dependencies {
     implementation("com.google.firebase:firebase-config")
 
     implementation("com.facebook.android:facebook-android-sdk:18.0.3")
+
+    implementation ("com.reyun.solar.engine.oversea:solar-engine-core:1.3.0.5"){
+        exclude(group = "com.huawei.hms", module = "ads-identifier")
+        exclude(group = "com.hihonor.mcs", module = "ads-identifier")
+    }
 }
