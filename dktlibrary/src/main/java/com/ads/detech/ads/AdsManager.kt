@@ -229,6 +229,10 @@ object AdsManager {
                 }
             }
 
+            "4"->{
+                AdsHolder.showAdBannerConfig(activity,adsConfig.units.banner_reload,viewGroup)
+            }
+
             else -> {
                 viewGroup.gone()
             }

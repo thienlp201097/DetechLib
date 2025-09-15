@@ -14,11 +14,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.ads.detech.AOAManager
 import com.ads.detech.AdmobUtils
+import com.ads.detech.AdmobUtils.BannerCollapsibleAdCallback
 import com.ads.detech.AdmobUtils.adImpressionFacebookSDK
 import com.ads.detech.AdmobUtils.adImpressionSolarEngineSDK
 import com.ads.detech.AdmobUtils.isTestDevice
 import com.ads.detech.AppOpenManager
 import com.ads.detech.CollapsibleBanner
+import com.ads.detech.GoogleEBanner
 import com.ads.detech.GoogleENative
 import com.ads.detech.R
 import com.ads.detech.activity.NativeFullActivity
@@ -305,6 +307,30 @@ object AdsHolder {
 
             override fun onPaid(adValue: AdValue?, mAdView: AdView?) {
             }
+        })
+    }
+    fun showAdBannerConfig(activity: Activity, adsEnum: String, view: ViewGroup) {
+        AdmobUtils.loadAndShowBannerCollapsibleWithConfig(activity, adsEnum,15, 0, view,
+            GoogleEBanner.UNIFIED_BOTTOM, object : BannerCollapsibleAdCallback {
+            override fun onClickAds() {
+
+            }
+
+            override fun onBannerAdLoaded(adSize: AdSize) {
+                view.visible()
+            }
+
+            override fun onAdFail(message: String) {
+                view.gone()
+            }
+
+            override fun onAdPaid(
+                adValue: AdValue,
+                mAdView: AdView
+            ) {
+
+            }
+
         })
     }
 

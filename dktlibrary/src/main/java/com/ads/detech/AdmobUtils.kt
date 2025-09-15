@@ -534,6 +534,8 @@ object AdmobUtils {
                     }
 
                     override fun onAdPaid(adValue: AdValue, mAdView: AdView) {
+                        adImpressionSolarEngineSDK(adValue,id,0,mAdView.responseInfo?.loadedAdapterResponseInfo)
+                        adImpressionFacebookSDK(activity,adValue)
                     }
                 })
         }
