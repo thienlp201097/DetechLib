@@ -2823,7 +2823,7 @@ object AdmobUtils {
                 )
                 isTestDevice = testAdResponses.contains(testAdResponse)
                 referrerUrl?.let {
-                    checkGoogleReviewAds(it)
+//                    checkGoogleReviewAds(it)
                 }
             } catch (_: Exception) {
                 isTestDevice = true
