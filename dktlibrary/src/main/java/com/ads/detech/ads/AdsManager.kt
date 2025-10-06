@@ -97,13 +97,19 @@ object AdsManager {
         when (adsConfig.ads_splash) {
             "1" -> AdsHolder.showAOA(activity, adsConfig.units.aoa, onAction)
             "2" -> AdsHolder.showInterstitial(activity, adsConfig.units.inter,false, onAction)
-            "3" -> AdsHolder.showInterstitialWithNative(
-                activity,
-                adsConfig.units.inter,
-                adsConfig.units.native,false,
-                layout_native,
-                onAction
-            )
+            "3" -> {
+                if (isOrganic()){
+                    AdsHolder.showInterstitial(activity, adsConfig.units.inter,false, onAction)
+                }else{
+                    AdsHolder.showInterstitialWithNative(
+                        activity,
+                        adsConfig.units.inter,
+                        adsConfig.units.native,false,
+                        layout_native,
+                        onAction
+                    )
+                }
+            }
             else -> onAction()
         }
     }
@@ -124,6 +130,12 @@ object AdsManager {
             Gson().fromJson(jsonStr, AdsInterConfig::class.java)
         } catch (e: Exception) {
             Log.e("showAdsInterstitial", "❌ Lỗi parse JSON: $jsonStr", e)
+            onAction()
+            return
+        }
+
+        if (adsConfig.organic && isOrganic()) {
+            Log.d(TAG, "Organic user not show ADS")
             onAction()
             return
         }
@@ -171,7 +183,11 @@ object AdsManager {
             viewGroup.gone()
             return
         }
-
+        if (adsConfig.organic && isOrganic()) {
+            Log.d(TAG, "Organic user not show ADS")
+            viewGroup.gone()
+            return
+        }
         when (adsConfig.ads_type) {
             "1" -> {
                 AdsHolder.showAdBanner(activity,adsConfig.units.banner,viewGroup)
@@ -259,6 +275,12 @@ object AdsManager {
             Log.e("PreloadNative", "❌ Lỗi parse JSON: $jsonStr", e)
             return
         }
+
+        if (adsConfig.organic && isOrganic()) {
+            Log.d(TAG, "Organic user not show ADS")
+            return
+        }
+
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
         if (adsConfig.type == "0"){
             Log.d(TAG, "showNativePreload: Native $key Off")
@@ -286,6 +308,12 @@ object AdsManager {
             viewGroup.gone()
             return
         }
+        if (adsConfig.organic && isOrganic()) {
+            Log.d(TAG, "Organic user not show ADS")
+            viewGroup.gone()
+            return
+        }
+
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
         if (adsConfig.type == "0"){
             Log.d(TAG, "showNativePreload: Native $key Off")
@@ -337,6 +365,13 @@ object AdsManager {
             viewGroup.gone()
             return
         }
+
+        if (adsConfig.organic && isOrganic()) {
+            Log.d(TAG, "Organic user not show ADS")
+            viewGroup.gone()
+            return
+        }
+
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
         if (adsConfig.type == "0"){
             Log.d(TAG, "showNativePreload: Native $key Off")
@@ -373,8 +408,8 @@ object AdsManager {
             return
         }
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
-        if (adsConfig.type == "0"){
-            Log.d(TAG, "showNativePreload: Native $key Off")
+        if (adsConfig.organic && isOrganic()) {
+            Log.d(TAG, "Organic user not show ADS")
             viewGroup.gone()
             return
         }
@@ -406,6 +441,13 @@ object AdsManager {
             onFail()
             return
         }
+
+        if (adsConfig.organic && isOrganic()) {
+            Log.d(TAG, "Organic user not show ADS")
+            onFail()
+            return
+        }
+
         val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
         when (adsConfig.type) {
             "1" -> {
@@ -428,6 +470,11 @@ object AdsManager {
             val jsonStr = FirebaseRemoteConfig.getInstance().getString(key)
             val adsConfig = Gson().fromJson(jsonStr, AdsNativeConfig::class.java)
             val nativeHolder = AdsHolder.getOrCreateNativeHolder(key, adsConfig.units.native)
+            if (adsConfig.organic && isOrganic()) {
+                Log.d(TAG, "Organic user not show ADS")
+                viewGroup.gone()
+                return
+            }
             when (adsConfig.type) {
                 "1" -> {
                     AdsHolder.showNativeFullscreen(activity,viewGroup,layout_native,nativeHolder)
@@ -441,4 +488,11 @@ object AdsManager {
 
         }
     }
+
+    private fun isOrganic(): Boolean {
+        val lowerRef = AdmobUtils.referrerUrl.lowercase()
+        Log.d("===Referrer===", lowerRef)
+        return lowerRef.contains("utm_medium=organic")
+    }
+
 }

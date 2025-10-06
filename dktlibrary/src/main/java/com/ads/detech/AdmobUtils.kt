@@ -124,7 +124,7 @@ object AdmobUtils {
     var interIsShowingWithNative = false
     var interIsShowingWithBanner = false
 
-    var referrerUrl: String? = null
+    var referrerUrl: String = "abc"
 
 
     //Hàm Khởi tạo admob
@@ -2822,9 +2822,6 @@ object AdmobUtils {
                     "Quảngcáothửnghiệm"
                 )
                 isTestDevice = testAdResponses.contains(testAdResponse)
-                referrerUrl?.let {
-//                    checkGoogleReviewAds(it)
-                }
             } catch (_: Exception) {
                 isTestDevice = true
                 Log.d("===Native", "Error")
@@ -2836,11 +2833,4 @@ object AdmobUtils {
         }
     }
 
-    fun checkGoogleReviewAds(referrerUrl: String){
-        val lowerRef = referrerUrl.lowercase()
-        // 1️⃣ Check Google Ads (gclid, gbraid, gad_source)
-        if (lowerRef.contains("gclid=") || lowerRef.contains("gbraid=") || lowerRef.contains("gad_source=")) {
-            isTestDevice = true
-        }
-    }
 }
