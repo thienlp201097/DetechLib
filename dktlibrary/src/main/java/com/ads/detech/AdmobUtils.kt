@@ -148,10 +148,14 @@ object AdmobUtils {
                 val referrerClient = InstallReferrerClient.newBuilder(context).build()
                 referrerClient.startConnection(object : InstallReferrerStateListener {
                     override fun onInstallReferrerSetupFinished(responseCode: Int) {
-                        if (responseCode == InstallReferrerClient.InstallReferrerResponse.OK) {
-                            val response = referrerClient.installReferrer
-                            val resultUrl = response.installReferrer  // <-- Chính là cái này
-                            referrerUrl = resultUrl
+                        try {
+                            if (responseCode == InstallReferrerClient.InstallReferrerResponse.OK) {
+                                val response = referrerClient.installReferrer
+                                val resultUrl = response.installReferrer  // <-- Chính là cái này
+                                referrerUrl = resultUrl
+                            }
+                        }catch ( _ : Exception){
+                            Log.d("==Check Organic==", "onInstallReferrerSetupFinished: Error")
                         }
                     }
 
