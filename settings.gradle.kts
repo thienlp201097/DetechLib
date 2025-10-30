@@ -9,6 +9,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven { setUrl("https://jitpack.io") }
         maven { url = uri("https://maven-android.solar-engine.com/repository/se_sdk_for_android/") }
 
     }
@@ -18,6 +19,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { setUrl("https://jitpack.io") }
         maven { url = uri("https://maven-android.solar-engine.com/repository/se_sdk_for_android/") }
 
     }

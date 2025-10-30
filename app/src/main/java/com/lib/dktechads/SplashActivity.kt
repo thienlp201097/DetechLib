@@ -53,39 +53,23 @@ class SplashActivity : AppCompatActivity() {
                 val googleMobileAdsConsentManager = GoogleMobileAdsConsentManager(this@SplashActivity)
                 googleMobileAdsConsentManager.gatherConsent { error ->
                     error?.let {
-                        AdmobUtils.initAdmob(this@SplashActivity, isDebug = true, isEnableAds = true,false, object : MobileAdsListener {
-                            override fun onSuccess() {
-                                Log.d("==initAdmob==", "initAdmob onSuccess: ")
-                                AppOpenManager.getInstance()
-                                    .init(application, getString(R.string.test_ads_admob_app_open_new))
-                                AppOpenManager.getInstance()
-                                    .disableAppResumeWithActivity(SplashActivity::class.java)
-                                AppOpenManager.getInstance().setTestAds(false)
-                                com.ads.detech.ads.AdsManager.preloadNative(this@SplashActivity,"native_preload")
-                                com.ads.detech.ads.AdsManager.showAdsSplash(this@SplashActivity,RemoteConfig.AD_CONFIG,binding.frBanner,R.layout.ad_native_fullscreen){
-                                    Utils.getInstance().replaceActivity(this@SplashActivity, MainActivity::class.java)
-                                }
-                            }
-                        })
                     }
 
-                    if (googleMobileAdsConsentManager.canRequestAds) {
-                        AdmobUtils.initAdmob(this@SplashActivity, isDebug = true, isEnableAds = true,false, object : MobileAdsListener {
-                            override fun onSuccess() {
+                    AdmobUtils.initAdmob(this@SplashActivity, isDebug = true, isEnableAds = true,false, object : MobileAdsListener {
+                        override fun onSuccess() {
 
-                                Log.d("==initAdmob==", "initAdmob onSuccess: ")
-                                AppOpenManager.getInstance()
-                                    .init(application, getString(R.string.test_ads_admob_app_open_new))
-                                AppOpenManager.getInstance()
-                                    .disableAppResumeWithActivity(SplashActivity::class.java)
-                                AppOpenManager.getInstance().setTestAds(false)
-                                com.ads.detech.ads.AdsManager.preloadNative(this@SplashActivity,"native_preload")
-                                com.ads.detech.ads.AdsManager.showAdsSplash(this@SplashActivity,RemoteConfig.AD_CONFIG,binding.frBanner,R.layout.ad_native_fullscreen){
-                                    Utils.getInstance().replaceActivity(this@SplashActivity, MainActivity::class.java)
-                                }
+                            Log.d("==initAdmob==", "initAdmob onSuccess: ")
+                            AppOpenManager.getInstance()
+                                .init(application, getString(R.string.test_ads_admob_app_open_new))
+                            AppOpenManager.getInstance()
+                                .disableAppResumeWithActivity(SplashActivity::class.java)
+                            AppOpenManager.getInstance().setTestAds(false)
+                            com.ads.detech.ads.AdsManager.preloadNative(this@SplashActivity,"native_preload")
+                            com.ads.detech.ads.AdsManager.showAdsSplash(this@SplashActivity,RemoteConfig.AD_CONFIG,binding.frBanner,R.layout.ad_native_fullscreen){
+                                Utils.getInstance().replaceActivity(this@SplashActivity, MainActivity::class.java)
                             }
-                        })
-                    }
+                        }
+                    })
                 }
 
             }

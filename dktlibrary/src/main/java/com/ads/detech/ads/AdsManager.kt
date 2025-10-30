@@ -68,28 +68,74 @@ object AdsManager {
             onAction()
             return
         }
-        if (adsConfig.banner_splash == "1"){
-            AdmobUtils.loadAdBanner(activity, adsConfig.units.banner, viewGroup, object :
-                AdmobUtils.BannerCallBack {
-                override fun onClickAds() {
 
-                }
+        if (adsConfig.organic && isOrganic()) {
+            Log.d(TAG, "Organic user not show ADS")
+            viewGroup.gone()
+            onAction()
+            return
+        }
 
-                override fun onFailed(message: String) {
-                    checkAdsSplash(activity,adsConfig,layout_native_full,onAction)
-                }
+        when (adsConfig.banner_splash) {
+            "1" -> {
+                AdmobUtils.loadAdBanner(activity, adsConfig.units.banner, viewGroup, object :
+                    AdmobUtils.BannerCallBack {
+                    override fun onClickAds() {
 
-                override fun onLoad() {
-                    Handler(Looper.getMainLooper()).postDelayed({
+                    }
+
+                    override fun onFailed(message: String) {
                         checkAdsSplash(activity,adsConfig,layout_native_full,onAction)
-                    }, 1500)
+                    }
+
+                    override fun onLoad() {
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            checkAdsSplash(activity,adsConfig,layout_native_full,onAction)
+                        }, 1500)
+                    }
+
+                    override fun onPaid(adValue: AdValue?, mAdView: AdView?) {
+                    }
+                })
+            }
+            "2" -> {
+                val nativeHolder = NativeHolderAdmob(adsConfig.units.native)
+                val layoutId = when (adsConfig.native_type) {
+                    "1" -> nativeLayouts.getOrNull(0) ?: DEFAULT_LAYOUT_MEDIUM
+                    "2" -> nativeLayouts.getOrNull(1) ?: DEFAULT_LAYOUT_SMALL
+                    "3" -> nativeLayouts.getOrNull(2) ?: DEFAULT_LAYOUT_BANNER
+                    "4" -> nativeLayouts.getOrNull(3) ?: DEFAULT_LAYOUT_COLLAPSIBLE
+                    else -> DEFAULT_LAYOUT_MEDIUM
                 }
 
-                override fun onPaid(adValue: AdValue?, mAdView: AdView?) {
+                val size_layout = when (adsConfig.native_type) {
+                    "1" -> GoogleENative.UNIFIED_MEDIUM
+                    "2" -> GoogleENative.UNIFIED_SMALL
+                    "3" -> GoogleENative.UNIFIED_BANNER
+                    "4" -> GoogleENative.UNIFIED_MEDIUM
+                    else -> GoogleENative.UNIFIED_MEDIUM
                 }
-            })
-        }else{
-            checkAdsSplash(activity,adsConfig,layout_native_full,onAction)
+                when(adsConfig.native_type){
+                    "4"->{
+                        AdsHolder.loadAndShowNativeCollapsible(activity,viewGroup,layoutId,size_layout,nativeHolder){
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                checkAdsSplash(activity,adsConfig,layout_native_full,onAction)
+                            }, 1500)
+                        }
+                    }
+
+                    else -> {
+                        AdsHolder.loadAndShowNative(activity,viewGroup,layoutId,size_layout,nativeHolder){
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                checkAdsSplash(activity,adsConfig,layout_native_full,onAction)
+                            }, 1500)
+                        }
+                    }
+                }
+            }
+            else -> {
+                checkAdsSplash(activity,adsConfig,layout_native_full,onAction)
+            }
         }
     }
 
@@ -98,17 +144,13 @@ object AdsManager {
             "1" -> AdsHolder.showAOA(activity, adsConfig.units.aoa, onAction)
             "2" -> AdsHolder.showInterstitial(activity, adsConfig.units.inter,false, onAction)
             "3" -> {
-                if (isOrganic()){
-                    AdsHolder.showInterstitial(activity, adsConfig.units.inter,false, onAction)
-                }else{
-                    AdsHolder.showInterstitialWithNative(
-                        activity,
-                        adsConfig.units.inter,
-                        adsConfig.units.native,false,
-                        layout_native,
-                        onAction
-                    )
-                }
+                AdsHolder.showInterstitialWithNative(
+                    activity,
+                    adsConfig.units.inter,
+                    adsConfig.units.native_fullscreen,false,
+                    layout_native,
+                    onAction
+                )
             }
             else -> onAction()
         }
@@ -208,13 +250,13 @@ object AdsManager {
                 }
                 when(adsConfig.native_type){
                     "1" ->{
-                        AdsHolder.loadAndShowNative(activity,viewGroup,layoutId,GoogleENative.UNIFIED_MEDIUM,AdsHolder.NATIVE)
+                        AdsHolder.loadAndShowNative(activity,viewGroup,layoutId,GoogleENative.UNIFIED_MEDIUM,AdsHolder.NATIVE){}
                     }
                     "2" ->{
-                        AdsHolder.loadAndShowNative(activity,viewGroup,layoutId,GoogleENative.UNIFIED_SMALL,AdsHolder.NATIVE)
+                        AdsHolder.loadAndShowNative(activity,viewGroup,layoutId,GoogleENative.UNIFIED_SMALL,AdsHolder.NATIVE){}
                     }
                     "3" ->{
-                        AdsHolder.loadAndShowNative(activity,viewGroup,layoutId,GoogleENative.UNIFIED_BANNER,AdsHolder.NATIVE)
+                        AdsHolder.loadAndShowNative(activity,viewGroup,layoutId,GoogleENative.UNIFIED_BANNER,AdsHolder.NATIVE){}
                     }
                     "4" ->{
                         val params: ViewGroup.LayoutParams = viewGroup.layoutParams
@@ -240,7 +282,7 @@ object AdsManager {
                         )
                     }
                     else -> {
-                        AdsHolder.loadAndShowNative(activity,viewGroup,nativeLayouts.getOrNull(1) ?: DEFAULT_LAYOUT_SMALL,GoogleENative.UNIFIED_SMALL,AdsHolder.NATIVE)
+                        AdsHolder.loadAndShowNative(activity,viewGroup,nativeLayouts.getOrNull(1) ?: DEFAULT_LAYOUT_SMALL,GoogleENative.UNIFIED_SMALL,AdsHolder.NATIVE){}
                     }
                 }
             }
@@ -419,7 +461,7 @@ object AdsManager {
             "3" -> GoogleENative.UNIFIED_BANNER
             else -> GoogleENative.UNIFIED_MEDIUM
         }
-        AdsHolder.loadAndShowNative(activity,viewGroup,layout_native,size_layout,nativeHolder)
+        AdsHolder.loadAndShowNative(activity,viewGroup,layout_native,size_layout,nativeHolder){}
     }
 
     fun preloadNativeFullScreen(activity: Activity, key: String,onFail: () -> Unit){

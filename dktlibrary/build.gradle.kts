@@ -43,7 +43,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "com.detech"
             artifactId = "dktlibrary"
-            version = "1.1.0"
+            version = "1.1.3"
 
             afterEvaluate {
                 from(components["release"])
@@ -101,4 +101,6 @@ dependencies {
         exclude(group = "com.huawei.hms", module = "ads-identifier")
         exclude(group = "com.hihonor.mcs", module = "ads-identifier")
     }
+
+    implementation("com.github.tiktok:tiktok-business-android-sdk:1.5.0")
 }

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -93,6 +94,7 @@ object AdsHolder {
         })
         manager.loadAoA()
     }
+    private var lastClosedTime = 0L
 
     fun showInterstitial(activity: AppCompatActivity, adUnit: String,isDialog: Boolean, onAction: () -> Unit) {
         val inter = InterHolderAdmob(adUnit)
@@ -100,6 +102,13 @@ object AdsHolder {
 
         AdmobUtils.loadAndShowAdInterstitial(activity, inter, object : AdsInterCallBack {
             override fun onEventClickAdClosed() {
+                val now = SystemClock.elapsedRealtime()
+                if (now - lastClosedTime < 1000) {
+                    Log.d(TAG, "Ignored duplicate close event")
+                    return
+                }
+                lastClosedTime = now
+
                 Log.d(TAG, "Interstitial closed")
                 onAction()
             }
@@ -142,6 +151,14 @@ object AdsHolder {
             ActivityResultContracts.StartActivityForResult()
         ) {
             Log.d("showAdsSplash", "NativeFullActivity returned")
+            val now = SystemClock.elapsedRealtime()
+            if (now - lastClosedTime < 1000) {
+                Log.d(TAG, "Ignored duplicate close event")
+                return@register
+            }
+            lastClosedTime = now
+
+            Log.d(TAG, "Interstitial closed")
             onAction()
         }
 
@@ -190,7 +207,7 @@ object AdsHolder {
     fun loadAndShowNative(
         activity: Activity,
         nativeAdContainer: ViewGroup,layout : Int,size: GoogleENative,
-        nativeHolder: NativeHolderAdmob,
+        nativeHolder: NativeHolderAdmob,onLoadedOrFail: () -> Unit
     ) {
         AdmobUtils.loadAndShowNativeAdsWithLayoutAds(
             activity,
@@ -204,9 +221,45 @@ object AdsHolder {
                 }
 
                 override fun onNativeAdLoaded() {
+                    onLoadedOrFail()
                 }
 
                 override fun onAdFail(error: String) {
+                    onLoadedOrFail()
+                    nativeAdContainer.visibility = View.VISIBLE
+                }
+
+                override fun onAdPaid(adValue: AdValue?, adUnitAds: String?) {
+
+                }
+
+                override fun onClickAds() {
+                }
+            })
+    }
+
+    fun loadAndShowNativeCollapsible(
+        activity: Activity,
+        nativeAdContainer: ViewGroup,layout : Int,size: GoogleENative,
+        nativeHolder: NativeHolderAdmob,onLoadedOrFail: () -> Unit
+    ) {
+        AdmobUtils.loadAndShowNativeAdsWithLayoutAdsCollapsible(
+            activity,
+            nativeHolder,
+            nativeAdContainer,
+            layout,
+            size,
+            object : AdmobUtils.NativeAdCallbackNew {
+                override fun onLoadedAndGetNativeAd(ad: NativeAd?) {
+
+                }
+
+                override fun onNativeAdLoaded() {
+                    onLoadedOrFail()
+                }
+
+                override fun onAdFail(error: String) {
+                    onLoadedOrFail()
                     nativeAdContainer.visibility = View.VISIBLE
                 }
 

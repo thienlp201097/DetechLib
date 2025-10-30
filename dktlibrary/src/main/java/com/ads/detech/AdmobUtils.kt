@@ -24,6 +24,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.ads.detech.NativeFunc.Companion.populateNativeAdView
 import com.ads.detech.NativeFunc.Companion.populateNativeAdViewClose
 import com.ads.detech.NativeFunc.Companion.populateNativeAdViewNoBtn
+import com.ads.detech.track.TiktokSDKUtils
 import com.ads.detech.utils.SweetAlert.SweetAlertDialog
 import com.ads.detech.utils.admod.BannerHolderAdmob
 import com.ads.detech.utils.admod.InterHolderAdmob
@@ -177,6 +178,8 @@ object AdmobUtils {
     }
     @JvmStatic
     fun adImpressionSolarEngineSDK(adValue: AdValue, adUnitId: String, adFormat: Int, loadedAdapterResponseInfo : AdapterResponseInfo?){
+        TiktokSDKUtils.tiktokTrackEvent()
+
         val valueMicros: Long = adValue.valueMicros
         val currencyCode: String = adValue.currencyCode
         val precision: Int = adValue.precisionType
@@ -1291,13 +1294,9 @@ object AdmobUtils {
                             }
                         }
 
-                        if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-                            adCallback.onStartAction()
-                            show(activity)
-                            isAdShowing = true
-                        } else {
-                            handleAdFailure("Interstitial can't show in background", adCallback, appOpenManager)
-                        }
+                        adCallback.onStartAction()
+                        show(activity)
+                        isAdShowing = true
                     } ?: run {
                         handleAdFailure("mInterstitialAd null", adCallback, appOpenManager)
                     }
